@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>poll</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+</head>
+<body>
+
+    <pre></pre>
+    <form action="/r" method="post">
+    <fieldset>
+        <legend></legend>
+        <div id="choices">
+        
+        </div>
+    </fieldset>
+    <input type="submit">
+</form>
+        
+    
+
+    <script>
+
+        
+        fetch('/q')
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(myJson) {
+                console.log(JSON.stringify(myJson));
+                document.querySelector('pre').innerHTML = myJson.code;
+                document.querySelector('legend').innerHTML = myJson.question;
+                var choices = document.querySelector('#choices')
+                myJson.choices.forEach(function(c){
+                    
+                    var input = document.createElement("input");
+                    input.setAttribute("type", "radio")
+                    input.setAttribute("value", c.id)
+                    input.setAttribute("name", "choiceID")
+                    input.setAttribute("id", myJson.question)
+                    
+
+                    var label = document.createElement("label");
+                    label.appendChild(input)
+                    label.appendChild(document.createTextNode(c.text + "  ("+ c.votes+")"))
+
+                    var div = document.createElement("div");
+                    div.appendChild(label);
+                    
+                    choices.appendChild(div);
+
+                })
+                
+                
+            });
+        
+        
+
+    </script>
+    <style>
+        * {
+            font-size: 2rem;
+        }
+        pre {
+            padding: 8px;
+            background: #eee;
+        }
+    </style>
+</body>
+</html>
